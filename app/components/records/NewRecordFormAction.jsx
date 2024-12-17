@@ -16,7 +16,7 @@ const NewRecordFormAction = ({record,setRecord,setActiveTab}) => {
 
   useEffect(()=>{
       const fetchData = async () =>{
-        const response = await getActiveRecordsAction()
+        const response = await getActiveRecordsAction(session?.user?.organization)
         if(response.status===200){
           setRecordList(response.records)
         }
