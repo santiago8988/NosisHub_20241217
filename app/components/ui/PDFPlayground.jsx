@@ -51,7 +51,13 @@ const PDFPlayground = ({ data }) => {
           {paragraphs.map((paragraph, index) => (
             <View key={index} style={styles.section}>
               <Text style={styles.paragraphTitle}>{paragraph.title}</Text>
-              {paragraph.image && <Image src={paragraph.image} style={styles.image} />}
+              {paragraph.image && (
+                <Image 
+                  src={paragraph.image} 
+                  style={styles.image} 
+                  alt={`Image for ${paragraph.title}`}
+                />
+              )}
               <Text style={styles.content}>{paragraph.body}</Text>
             </View>
           ))}

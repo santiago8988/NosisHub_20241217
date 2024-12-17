@@ -1,13 +1,13 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-import { getActiveRecordsAction } from "@/app/_actions"
 import NewRecordForm from "@/app/components/records/NewRecordForm"
+import Link from "next/link"
 
 
 const NewRecord = async () => {
 
   const session = await getServerSession(authOptions)
-  const recordList = await getActiveRecordsAction()
+
 
   const isAdmin= session?.user?.role==='admin'
 

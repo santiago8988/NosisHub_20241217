@@ -100,10 +100,10 @@ export default function DocumentationPage() {
           <p className="text-gray-600 mb-3">Para subir un nuevo documento:</p>
           <ol className="list-decimal list-inside space-y-2 text-gray-600 pl-4">
             <li>Ve a la sección de documentos</li>
-            <li>Haz clic en "Subir documento"</li>
+            <li>Haz clic en &quot;Subir documento&quot;</li>
             <li>Selecciona el archivo de tu dispositivo</li>
             <li>Añade metadatos relevantes (título, descripción, etiquetas)</li>
-            <li>Haz clic en "Subir" para finalizar el proceso</li>
+            <li>Haz clic en &quot;Subir&quot; para finalizar el proceso</li>
           </ol>
         </div>
 

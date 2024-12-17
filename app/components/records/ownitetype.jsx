@@ -1,6 +1,6 @@
 'use client'
 
-import { useState,useEffect } from "react"
+import React,{ useState,useEffect } from "react"
 import InputReference from "./InputReference"
 import InputComparacion from "./InputComparacion"
 import InputEntradaRelacionada from "./InputEntradaRelacionada"
@@ -24,7 +24,22 @@ const ownitetype = ({label, record,setRecord,onDelete}) => {
             }
         }
         fetchRecord()
-    },[])
+    },[selectedOption, customOption, label, record, setRecord])
+
+    /*useEffect(()=>{
+        const fetchRecord = async () =>{
+            const response = await getActiveRecordsAction()
+            if(response.status===200){
+                const sortedRecords = response.records.sort((a, b) => {
+                    if (a.name < b.name) return -1;
+                    if (a.name > b.name) return 1;
+                    return 0;
+                  });
+                setRecordList(sortedRecords)
+            }
+        }
+        fetchRecord()
+    },[])*/
 
     useEffect(()=>{
             const updatedOwn={...record.own}

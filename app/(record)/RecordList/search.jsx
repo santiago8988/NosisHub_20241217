@@ -1,13 +1,14 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useRouter,usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
+import { useRouter } from 'next/router'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { useDebounce } from 'use-debounce'
 
 const Search = ({ search }) => {
   const router = useRouter()
-  const pathName=usePathname();
+  const pathName=router.pathname
   const initialRender = useRef(true)
 
   const [text, setText] = useState(search)
