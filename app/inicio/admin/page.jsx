@@ -6,6 +6,8 @@ import RegistrosTable from '@/components/admin/RegistrosTable'
 import ErrorBoundary from '@/components/admin/ErrorBoundary'
 import { getEntriesByOrganizationAdminAction } from '@/app/_actions'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminPage() {
   const session = await getServerSession(authOptions)
 

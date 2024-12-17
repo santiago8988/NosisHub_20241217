@@ -5,6 +5,8 @@ import { getOrganizationAction } from "../_actions"
 import { FileText, Folder, LockKeyhole, Home, Calculator, Book } from 'lucide-react'
 import Sidebar2 from "../components/ui/SideBar2"
 
+export const dynamic = 'force-dynamic'
+
 const itemsAdmin = [
   {
     label: 'Admin',
