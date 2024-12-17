@@ -3,7 +3,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { v4 as uuid } from "uuid"
 import { Suspense } from "react"
 import Search from "../search"
-import Skeleton from "../Skeleton"
+import Skeleton from "../skeleton"
 import Await from "../await"
 import List from "@/app/components/records/RecordList"
 import {Button} from '../../../../components/ui/button'

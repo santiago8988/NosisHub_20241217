@@ -3,12 +3,12 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { v4 as uuid } from "uuid"
 import { Suspense } from "react"
 import Search from "./search"
-import Skeleton from "./Skeleton"
+import Skeleton from "./skeleton"
 import Await from "./await"
 import List from "@/app/components/records/RecordList"
 import {Button} from '../../../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card"
-import { BarChart ,Calendar,CheckCircle} from 'lucide-react'
+import { BarChart } from 'lucide-react'
 import { getOrganizationAction, getRecordsByUserEmailAction, getRecordsByUserEmailAction2 } from "@/app/_actions"
 import { convertToPlainObject } from "@/lib/utils/utils"
 import Pagination from "@/app/components/documents/Pagination"

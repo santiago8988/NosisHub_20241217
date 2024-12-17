@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/ca
 import { BarChart ,Calendar,CheckCircle} from 'lucide-react'
 import Search from "./search"
 import { getDocumentsByUser2Action, getDocumentsByUserAction } from "@/app/_actions"
-import Skeleton from "./Skeleton"
+import Skeleton from "./skeleton"
 import Await from "./await"
 import Documents from "../components/documents/Documents"
 import Pagination from "../components/documents/Pagination"

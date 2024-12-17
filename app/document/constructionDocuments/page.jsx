@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui
 import { BarChart } from 'lucide-react'
 import Search from "../search"
 import { getDocumentsNotPublishedByUserAction, getDocumentsNotPublishedByUserAction2, getOrganizationAction } from "@/app/_actions"
-import Skeleton from "../Skeleton"
+import Skeleton from "../skeleton"
 import Await from "../await"
 import Documents from "@/app/components/documents/Documents"
 import Pagination from "@/app/components/documents/Pagination"
