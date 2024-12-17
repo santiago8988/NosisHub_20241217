@@ -1,5 +1,28 @@
 'use client'
 
+import { signIn } from 'next-auth/react'
+import { Button } from "@/components/ui/button"
+
+export default function GoogleSignInButton() {
+  const handleGoogleSignIn = () => {
+    signIn('google', { callbackUrl: '/inicio' })
+  }
+
+  return (
+    <Button
+      onClick={handleGoogleSignIn}
+      variant="outline"
+      className="w-full"
+    >
+      Continue with Google
+    </Button>
+  )
+}
+
+
+
+/*'use client'
+
 import { useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 
@@ -33,4 +56,4 @@ const GoogleSignInButton = () => {
   )
 }
 
-export default GoogleSignInButton
+export default GoogleSignInButton*/
