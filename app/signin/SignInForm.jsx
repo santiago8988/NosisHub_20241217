@@ -3,9 +3,9 @@
 import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Button } from '../../components/ui/button'
+import { Input } from "../../components/ui/input"
+import { Label } from "../../components/ui/label"
 import GoogleSignInButton from '@/components/GoogleSignInButton'
 
 export default function SignInForm() {
