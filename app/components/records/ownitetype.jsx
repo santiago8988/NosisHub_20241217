@@ -5,15 +5,17 @@ import InputReference from "./InputReference"
 import InputComparacion from "./InputComparacion"
 import InputEntradaRelacionada from "./InputEntradaRelacionada"
 import { getActiveRecordsAction } from "@/app/_actions"
+import { useSession } from "next-auth/react"
 
 const Ownitetype = ({label, record,setRecord,onDelete}) => {
 
+    const {data:session}=useSession()
     const [type,setType]=useState(record.own ? record.own[label].tipo  : '')
     const [recordList,setRecordList]=useState([])
 
     useEffect(()=>{
         const fetchRecord = async () =>{
-            const response = await getActiveRecordsAction()
+            const response = await getActiveRecordsAction(session?.user?.organization)
             if(response.status===200){
                 const sortedRecords = response.records.sort((a, b) => {
                     if (a.name < b.name) return -1;
@@ -24,7 +26,7 @@ const Ownitetype = ({label, record,setRecord,onDelete}) => {
             }
         }
         fetchRecord()
-    },[label, record, setRecord])
+    },[label, record, setRecord,session])
 
     /*useEffect(()=>{
         const fetchRecord = async () =>{
@@ -55,7 +57,7 @@ const Ownitetype = ({label, record,setRecord,onDelete}) => {
 
   return (
     <div className="mt-0 grid grid-cols-1 gap-x-2 gap-y-8 sm:grid-cols-6">
-    <div className="flex col-span-5">
+    <div className="flex col-span-5 gap-10">
         <div className="flex gap-2 w-1/3">
             <label htmlFor={`type_${label}`} >
                 Tipo
