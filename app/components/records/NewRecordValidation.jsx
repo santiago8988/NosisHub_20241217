@@ -244,7 +244,7 @@ const NewRecordValidation = ({record}) => {
                     if(record.type==='NOT PERIODIC' || record.type==='NOT PERIODIC WITH REVISION'){
                         isValid=true;
                     }else{
-                        isValid = value >= record.notify;
+                        isValid = value < record.notify;
                         if (!isValid) {
                             error = 'Periodicidad inválida. No puede ser menor que notificar.';
                         }            
@@ -255,7 +255,7 @@ const NewRecordValidation = ({record}) => {
                         isValid=true;
                     }else{
                         //Verificacion de la notificacion
-                        isValid = record.periodicity >= value;
+                        isValid = record.periodicity <= value;
                         if (!isValid) {
                           error = 'Notificar inválida. No puede ser mayor que la frequencia.';
                         }
