@@ -1,5 +1,5 @@
 import SignInForm from './SignInForm'
-
+import { Suspense } from 'react'
 export default function SignInPage() {
   return (
     <section className='flex min-h-full overflow-hidden pt-16 sm:py-28'>
@@ -10,7 +10,9 @@ export default function SignInPage() {
           </h1>
         </div>
         <div className='sm:rounded-5xl -mx-4 mt-10 flex-auto bg-white px-4 py-10 shadow-2xl shadow-gray-900/10 sm:mx-0 sm:flex-none sm:p-24'>
-          <SignInForm />
+          <Suspense fallback={<div>Loading form...</div>}>
+            <SignInForm />
+          </Suspense>
         </div>
       </div>
     </section>
