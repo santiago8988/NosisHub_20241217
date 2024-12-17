@@ -4,7 +4,7 @@ import { PDFDownloadLink, Document, Page, StyleSheet } from '@react-pdf/renderer
 import { ErrorBoundary } from 'react-error-boundary';
 import * as Babel from '@babel/standalone';
 
-const PdfPreview = ({ code }) => {
+function PdfPreview({ code }) {
   const [error, setError] = useState(null);
   const [PdfComponent, setPdfComponent] = useState(null);
   const componentInstanceRef = useRef(null);
@@ -19,7 +19,7 @@ const PdfPreview = ({ code }) => {
       });
 
       // Create a functional component
-      //const Component = eval(transpiledCode);
+      const Component = eval(transpiledCode);
 
       // Wrap the component in PdfPageContent and memoize it
       const PdfPageContent = React.memo(({ contentRef }) => {
