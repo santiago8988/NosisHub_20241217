@@ -6,7 +6,7 @@ import InputComparacion from "./InputComparacion"
 import InputEntradaRelacionada from "./InputEntradaRelacionada"
 import { getActiveRecordsAction } from "@/app/_actions"
 
-const ownitetype = ({label, record,setRecord,onDelete}) => {
+const Ownitetype = ({label, record,setRecord,onDelete}) => {
 
     const [type,setType]=useState(record.own ? record.own[label].tipo  : '')
     const [recordList,setRecordList]=useState([])
@@ -111,4 +111,4 @@ const ownitetype = ({label, record,setRecord,onDelete}) => {
   )
 }
 
-export default ownitetype
+export default Ownitetype

@@ -1,14 +1,13 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { usePathname } from 'next/navigation'
-import { useRouter } from 'next/router'
+import { usePathname, useRouter } from 'next/navigation'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { useDebounce } from 'use-debounce'
 
 const Search = ({ search }) => {
   const router = useRouter()
-  const pathName=router.pathname
+  const pathname = usePathname()
   const initialRender = useRef(true)
 
   const [text, setText] = useState(search)
@@ -21,11 +20,11 @@ const Search = ({ search }) => {
     }
 
     if (!query) {
-      router.push(`${pathName}`)
+      router.push(`${pathname}`)
     } else {
-      router.push(`${pathName}?search=${query}`)
+      router.push(`${pathname}?search=${query}`)
     }
-  }, [query])
+  }, [query, pathname, router])
 
   return (
     <div className='relative rounded-md shadow-sm'>
@@ -46,3 +45,4 @@ const Search = ({ search }) => {
 }
 
 export default Search
+
