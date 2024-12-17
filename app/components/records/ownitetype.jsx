@@ -24,7 +24,7 @@ const Ownitetype = ({label, record,setRecord,onDelete}) => {
             }
         }
         fetchRecord()
-    },[selectedOption, customOption, label, record, setRecord])
+    },[label, record, setRecord])
 
     /*useEffect(()=>{
         const fetchRecord = async () =>{

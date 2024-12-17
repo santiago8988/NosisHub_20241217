@@ -35,11 +35,11 @@ const ownitem = ({label,value,identifier,setRecord,record,onDelete}) => {
     <Label
       htmlFor={label}
       /*className='cursor-pointer peer-data-[state=checked]:text-gray-500 peer-data-[state=checked]:line-through'*/
-      className='cursor-pointer peer-data-[state=checked]:text-blue-500 peer-data-[state=checked]:text-blue-500'
+      className='cursor-pointer  peer-data-[state=checked]:text-blue-500'
     >
       {label}
     </Label>
-    <span className='ml-auto text-sm  peer-data-[state=checked]:text-blue-500 peer-data-[state=checked]:text-blue-500'>
+    <span className='ml-auto text-sm  peer-data-[state=checked]:text-blue-500'>
             <OwnItemType label={label} record={record} setRecord={setRecord} onDelete={onDelete}/>
     </span>
   </li>
