@@ -19,7 +19,7 @@ const PdfPreview = ({ code }) => {
       });
 
       // Create a functional component
-      const Component = eval(transpiledCode);
+      //const Component = eval(transpiledCode);
 
       // Wrap the component in PdfPageContent and memoize it
       const PdfPageContent = React.memo(({ contentRef }) => {
