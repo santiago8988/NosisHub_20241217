@@ -48,8 +48,8 @@ export async function getRecordByIdAction(recordid){
   return fecth
 }
 
-export async function getActiveRecordsAction(){
-  const response = await getActiveRecords()
+export async function getActiveRecordsAction(organizationid){
+  const response = await getActiveRecords(organizationid)
   const list = await response.json()
   revalidatePath('/RecordList')
   return list;
