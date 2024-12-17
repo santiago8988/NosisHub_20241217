@@ -2,7 +2,7 @@ import React from 'react'
 import { getDocumentByIdAction } from '@/app/_actions'
 import ButtonDocumentNewVersion from '@/app/components/documents/ButtonDocumentNewVersion'
 import ButtonUploadPdf from '@/app/components/documents/ButtonUploadPdf'
-import Base64ToPdf from '@/app/components/documents/Base64ToPdf'
+import Base64ToPdf from '../../../components/documents/Base64toPdf'
 
 const info = async ({params}) => {
   const data = await getDocumentByIdAction(params.id)

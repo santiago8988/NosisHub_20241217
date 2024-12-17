@@ -2,8 +2,10 @@ import { ToastContainer } from "react-toastify"
 import { Home,Calculator,Book} from "lucide-react"
 import Sidebar2 from "@/components/ui/SideBar2"
 import { getServerSession} from "next-auth"
-import { authOptions } from "../api/auth/[...nextauth]/route"
-import { getOrganizationAction } from "../_actions"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { getOrganizationAction } from "@/app/_actions"
+
+
 
 
 const items=[
@@ -33,6 +35,7 @@ const EntryLayout = async ({children}) => {
 
   if (session?.user?.organization) {
     organization = await getOrganizationAction(session.user.organization)
+ 
   }
 
     return (
