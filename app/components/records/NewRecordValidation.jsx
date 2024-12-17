@@ -170,13 +170,17 @@ const NewRecordValidation = ({record}) => {
     }
 
     const validateObject=(obj)=> {
+        console.log('obj',obj)
         for (let key in obj) {
             if (obj.hasOwnProperty(key)) {
                 let value = obj[key];
-                
+                console.log('obj[key]',value)
                 // Verifica si el valor es un objeto
                 if (typeof value === 'object' && value !== null) {
                     // Excepción para 'entradaRelacionada' con la key 'entrie'
+                    if(value.tipo===''){
+                        return {valid:false,msg:''};
+                    }
                     if (value.tipo === 'entradaRelacionada') {
                         if(key === 'entrie'){
                             continue;
@@ -193,6 +197,7 @@ const NewRecordValidation = ({record}) => {
                         const resultado=formulaValidation(value,key)
                         return resultado
                     }
+
                     // Recursivamente valida el objeto
                     if (!validateObject(value)) {
                         return {valid:false,msg:''};
@@ -211,6 +216,7 @@ const NewRecordValidation = ({record}) => {
     }
  
       const verifyAttribute = async (attribute, value) => {
+        
         setStatus(prev => ({
           ...prev,
           [attribute]: { loading: true, success: null, error: '' },
@@ -275,6 +281,7 @@ const NewRecordValidation = ({record}) => {
                                     }
                                 }   
                     }else if(attribute==='own'){
+                        
                         const resultado=validateObject(record.own)
                         isValid=resultado.valid     
                         if(!isValid){
