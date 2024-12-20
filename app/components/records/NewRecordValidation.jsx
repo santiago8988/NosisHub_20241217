@@ -257,7 +257,7 @@ const NewRecordValidation = ({record}) => {
                         //Verificacion de la notificacion
                         isValid = record.periodicity >= value;
                         if (!isValid) {
-                          error = 'Notificar inválida. No puede ser mayor que la frequencia.';
+                          error = 'Notificar inválida. No puede ser mayor que la frecuencia.';
                         }
                     }
                 }else if(attribute==='identifier'){
