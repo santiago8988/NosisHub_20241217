@@ -2,14 +2,14 @@
 import {Fragment,useState,useEffect} from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react';
-import { createRecordAction, getActiveRecordsNamesAction, inactiveRecordAction } from '@/app/_actions';
+import { createRecordAction, getActiveRecordsNamesAction, importEntrysAction, inactiveRecordAction } from '@/app/_actions';
 import { ToastContainer, toast } from 'react-toastify'
+import OffCanvasImportEntrys from './OffCanvasImportEntrys';
 
 const NewRecordValidation = ({record}) => {
 
     const router = useRouter()
     const { data: session, update } = useSession()
-
     const [records,setRecords] = useState([])
     const [status, setStatus] = useState({
         name: { loading: false, success: null, error: '' },
@@ -20,6 +20,11 @@ const NewRecordValidation = ({record}) => {
         own: { loading: false, success: null, error: '' },
         actions: { loading: false, success: null, error: [] },
       });
+
+      const [showModal, setShowModal] = useState(false)
+      const [importEntrys, setImportEntrys] = useState(false)
+      const [isReadyToCreate, setIsReadyToCreate] = useState(false)
+
 
     useEffect(()=>{
         const fetchRecords= async ()=>{
@@ -93,9 +98,6 @@ const NewRecordValidation = ({record}) => {
         const variableRegex = /\b[A-Z_]+\b/g;
         const variables = expresion.match(variableRegex);
         
-        /*console.log('numberFields',numberFields)
-        console.log('formulaFields',formulaFields)
-        console.log('referenceFields',referenceFields)*/
 
         // Verifica que la expresión no contenga la clave KEY
         if (variables && variables.includes(key)) {
@@ -170,7 +172,6 @@ const NewRecordValidation = ({record}) => {
     }
 
     const validateObject=(obj)=> {
-        console.log('obj',obj)
         for (let key in obj) {
             if (obj.hasOwnProperty(key)) {
                 let value = obj[key];
@@ -324,8 +325,30 @@ const NewRecordValidation = ({record}) => {
         
             return isValid;
      };
+
+     const handleClick = ()=>{
+        if(record?._id){
+            setShowModal(true);
+        }else{
+            handleCreate()
+        }
+     }
+
+     const handleModalClose = (shouldImport) => {
+        setImportEntrys(shouldImport);
+        setIsReadyToCreate(true);
+        setShowModal(false);
+        handleCreate();
+    };
     
       const handleCreate = async () => {
+
+        if (record?._id && !isReadyToCreate) {
+            // If not ready to create, just open the modal
+            setShowModal(true);
+            return;
+        }
+
         const attributes = ['name', 'type','periodicity','notify','identifier','own','actions']; 
         let allValid = true;
            
@@ -346,7 +369,13 @@ const NewRecordValidation = ({record}) => {
                         autoClose: 2000
                       })
                       if(record._id){
+
                         const responseInactiveRecord = await inactiveRecordAction(record._id)
+                        let responseImportEntrys
+                            if(importEntrys){
+                                    responseImportEntrys=await importEntrysAction(record?._id,response.recordId,Object.keys(record?.own))
+                            }
+                            console.log(responseImportEntrys)
                         if(responseInactiveRecord.status===200){
                             toast(`${responseInactiveRecord.message}`, {
                               theme: 'colored',
@@ -565,10 +594,10 @@ const NewRecordValidation = ({record}) => {
                                 Cancelar
                             </button>
                             <button
-                                onClick={handleCreate}
+                                onClick={handleClick}
                                 className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                             >
-                            Crear
+                            {record?._id ? 'Nueva Versión' : 'Crear'}
                             </button>
                         </div>
                     </div>
@@ -578,6 +607,7 @@ const NewRecordValidation = ({record}) => {
                     <p className='mt-3'>No hay registro configurado aún.</p>
                 )
         } 
+        <OffCanvasImportEntrys open={showModal} setOpen={setShowModal} onClose={handleModalClose}/>
         <ToastContainer/>
 
     </Fragment>

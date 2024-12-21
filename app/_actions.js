@@ -2,7 +2,7 @@
 
 import { changeUserStatus, createUser, getAllowedUsers } from '@/lib/mongo/allowedusers';
 import { getDocumentsByUser2,addFunctionalPdf, addParagraph, changeStatus, createDocument, deleteDocumentAccess, deleteParagraph, editParagraph, getDocumentById, getDocumentByName, getDocuments, getDocumentsByUser, setDocumentAccess, getDocumentToReview, getDocumentsNotPublishedByUser, getDocumentsNotPublishedByUser2, getDocumentsObsoleteByUser, getDocumentsObsoleteByUser2 } from '@/lib/mongo/documents';
-import { complete, createEntry, getEntriesByOrganizationAdmin, getEntriesByRecord, getEntriesByRecordId, getEntriesByUser, getEntry, inactivateEntry, updateNextField } from '@/lib/mongo/entries';
+import { complete, createEntry, getEntriesByOrganizationAdmin, getEntriesByRecord, getEntriesByRecordId, getEntriesByUser, getEntry, importEntrys, inactivateEntry, updateNextField } from '@/lib/mongo/entries';
 import { createHistory, getHistoryByDocumentId } from '@/lib/mongo/history';
 import { addArea, addQA, deleteArea, deleteQA, getAreas, getOrganization, getRoles } from '@/lib/mongo/organization';
 import { addCollaborators, createRecord, deleteCollaborator, getActiveRecords, getActiveRecordsNames, getRecordById, getRecordsByUserEmail, getRecordsByUserEmail2, getRecordsObsoleteByUserEmail, getRecordsObsoleteByUserEmail2, inactiveRecord } from '@/lib/mongo/records'
@@ -74,6 +74,7 @@ export async function inactiveRecordAction(recordId){
   const result = await response.json();
   return result;
 }
+
 
 export async function addCollaboratorsAction(recordid,collaborators){
   const response=await  addCollaborators(recordid,collaborators)
@@ -190,6 +191,28 @@ export async function executeAction(actions,values){
     } catch (error) {
         throw error; // 
       }
+}
+
+export async function importEntrysAction(recordid, newrecordid, newownkeys) {
+  try {
+    const response = await importEntrys(recordid, newrecordid, newownkeys)
+    const data = await response.json()
+    revalidatePath('/RecordList')
+    
+    return {
+      success: true,
+      data: data, // This assumes importEntrys returns a NextResponse
+      message: data.message,
+      count: data.count
+    }
+  } catch (error) {
+    console.error('Error en importación:', error)
+    return {
+      success: false,
+      error: 'Failed to import entries',
+      message: error instanceof Error ? error.message : 'Unknown error occurred'
+    }
+  }
 }
 
 export async function createNextEntrie(data,identifier,periodicity,type){
