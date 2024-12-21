@@ -1,7 +1,5 @@
 'use client'
-import React, { Fragment } from 'react';
-import Link from "next/link"
-import {Button} from '../../../components/ui/button'
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../components/ui/table"
 import { Badge } from "../../../components/ui/badge"
@@ -9,15 +7,25 @@ import DaysLeft from "../ui/DaysLeft"
 import UserProfileImage from "../allowedUsers/UserProfileImage"
 import Base64ToPdf from "../ui/Base64ToPdf"
 import ActionMenu from "./ActionMenu"
+import LabelGenerator from '../ui/LabelGenerator';
 
 
 const EntriesTable = ({record,entries}) => {
-   
+
+    {/*const labels = [
+        { barcodeValue: '123456789012', barcodeType: 'UPC' },
+      ];
+    
+      // Convertir cm a puntos (1 cm = 28.3465 puntos)
+      const width = 15 * 28.3465;
+      const height = 15 * 28.3465;
+      <LabelGenerator width={width} height={height} labels={labels} />*/}
   return (
     <>
         <Card>
                 <CardHeader>
                     <CardTitle></CardTitle>
+                    
                 </CardHeader>
                 <CardContent>
                     <Table>
