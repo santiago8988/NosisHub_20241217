@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation"
 const NavLink = ({href,...rest}) => {
 
     const pathname=usePathname()
-    const isActive= href === pathname
+   // const isActive= href === pathname
+   const isActive= pathname.includes(href)
 
   return  <Link 
              className={isActive ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-gray-800'}

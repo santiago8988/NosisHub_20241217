@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 const Pagination = ({ currentPage, totalItems, itemsPerPage }) => {
+
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()

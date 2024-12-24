@@ -15,6 +15,7 @@ const Header = () => {
           <nav className="hidden md:flex space-x-4">
             <NavLink href='/inicio'>Inicio</NavLink>
             <NavLink href='/RecordList'>Registros</NavLink>
+            <NavLink href='/produccion'>Produccion</NavLink>
             <NavLink href='/document'>Documentos</NavLink>
             <NavLink href='/organization'>Organización</NavLink>
             <NavLink href='/inicio/admin'>Admin</NavLink>
