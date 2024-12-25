@@ -5,6 +5,7 @@ import { getOrganizationAction } from "../_actions"
 import { ToastContainer } from "react-toastify"
 import Sidebar2 from "../components/ui/SideBar2"
 import { House,Calculator,Book,CookingPot,ChartNoAxesGantt,LogOut,ScanEye,ShoppingBasket } from "lucide-react"
+import { LogIn } from "lucide-react"
 
 const items=[
     {
@@ -22,6 +23,11 @@ const items=[
         href:'/produccion/ordenes-produccion',
         icon: <ChartNoAxesGantt className="inline-block mr-2 h-5 w-5"/>
     },
+    {
+      label:'Ingreso Materias',
+      href:'/produccion/ingreso-materias',
+      icon: <LogIn className="inline-block mr-2 h-5 w-5" />
+  },
     {
         label:'Egreso',
         href:'/produccion/egreso-producto',

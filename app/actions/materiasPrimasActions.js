@@ -1,5 +1,7 @@
 'use server'
 import { getMateriaPrimas, getMateriaPrimasByOrganizationPagination,updateMateriaPrima,createMateriaPrima} from "@/lib/mongo/materiaPrima"
+import { revalidatePath } from "next/cache"
+import organization from "../organization/page"
 
  
 export async function getMateriaPrimasAction(organizationId) {
@@ -9,7 +11,8 @@ export async function getMateriaPrimasAction(organizationId) {
         status: 200, 
         materiasPrimas: materiasPrimas.map(mp => ({
           ...mp.toObject(),
-          _id: mp._id.toString()
+          _id: mp._id.toString(),
+          organization: mp.organization.toString()
         }))
       }
     } catch (error) {
@@ -28,6 +31,7 @@ export async function getMateriaPrimasAction(organizationId) {
       const result = await createMateriaPrima(newMateriaPrima)
       
       if (result.status === 201) {
+        revalidatePath('/produccion/materias-primas')
         return { success: true, materiaPrima: result.materiaPrima }
       }
       
@@ -49,6 +53,7 @@ export async function getMateriaPrimasAction(organizationId) {
       }
       
       if (result.status === 200) {
+        revalidatePath('/produccion/materias-primas')
         return { success: true, materiaPrima: result.materiaPrima }
       }
       

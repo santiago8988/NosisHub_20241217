@@ -12,13 +12,13 @@ import { BarChart,Plus } from 'lucide-react'
 import { convertToPlainObject } from "@/lib/utils/utils"
 import Pagination from "@/app/components/documents/Pagination"
 import List from "./components/List"
-import { getMateriaPrimasAction, getMateriaPrimasByOrganizationPaginationAction } from "@/app/actions"
 import AddButton from "./components/AddButton"
+import { getIngresosMateriaPrimaAction, getIngresosMateriaPrimaPaginationAction } from "@/app/actions/ingresoMateriasPrimasActions"
 
-const MateriasPrimas = async(searchParams) => {
+const IngresoMateriasPrimas = async(searchParams) => {
 
     const session = await getServerSession(authOptions)
-    const { status, materiasPrimas, message } = await getMateriaPrimasAction(session?.user?.organization)
+    const { status, ingresosMateriaPrima, message } = await getIngresosMateriaPrimaAction(session?.user?.organization)
 
     const page = typeof searchParams.page === 'string' ? Number(searchParams.page) : 1
     const limit = typeof searchParams.limit === 'string' ? Number(searchParams.limit) : 12
@@ -28,12 +28,12 @@ const MateriasPrimas = async(searchParams) => {
       return <div className="text-red-500">{message}</div>
     }
 
-    const promise=getMateriaPrimasByOrganizationPaginationAction(session?.user?.organization,search,page,limit)
+    const promise=getIngresosMateriaPrimaPaginationAction(session?.user?.organization,search,page,limit)
 
   return (
     <section className='flex-1 overflow-y-auto bg-white p-5' key={uuid()}>
         <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-bold text-gray-900">Materias Primas</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Ingreso Materias Primas</h1>
             <div className="flex items-center space-x-2">
               <Search search={search} className="h-4 w-4 mr-2"/>
               <Button className='ml-2'> Buscar</Button>
@@ -49,7 +49,7 @@ const MateriasPrimas = async(searchParams) => {
                 <BarChart className="h-4 w-4 text-blue-500" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{materiasPrimas?.length>=0 ? materiasPrimas?.length : 0 }</div>
+                <div className="text-2xl font-bold">{ingresosMateriaPrima?.length>=0 ? ingresosMateriaPrima?.length : 0 }</div>
               </CardContent>
             </Card>
         </div>
@@ -58,7 +58,7 @@ const MateriasPrimas = async(searchParams) => {
         <Await promise={promise}>
           {(data) => (
             <>
-              <List list={convertToPlainObject(data.materiasPrimas)} />
+              <List list={convertToPlainObject(data.ingresosMateriaPrima)} />
               <Pagination
                 currentPage={data.page}
                 totalItems={data.totalDocs}
@@ -74,4 +74,4 @@ const MateriasPrimas = async(searchParams) => {
   )
 }
 
-export default MateriasPrimas
+export default IngresoMateriasPrimas

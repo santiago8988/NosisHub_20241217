@@ -26,19 +26,21 @@ const List = ({list}) => {
                     <TableHeader>
                         <TableRow>
                             <TableHead>Materia Prima</TableHead>
-                            <TableHead>Código</TableHead>
-                            <TableHead>Código Interno</TableHead>
-                            <TableHead>Sinónimos</TableHead>
+                            <TableHead>Cantidad</TableHead>
+                            <TableHead>Unidad</TableHead>
+                            <TableHead>Lote</TableHead>
+                            <TableHead>Fecha Ingreso</TableHead>
                             <TableHead>Acción</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {list?.map((record) => (
                         <TableRow key={record._id}>
-                            <TableCell>{record.nombre}</TableCell>
-                            <TableCell>{record.codigo}</TableCell>
-                            <TableCell>{record.codigoInterno}</TableCell>
-                            <TableCell>{record.sinonimos?.join(', ')}</TableCell>
+                            <TableCell>{record.materiaPrima.nombre}</TableCell>
+                            <TableCell>{record.cantidad}</TableCell>
+                            <TableCell>{record.unidad}</TableCell>
+                            <TableCell>{record.lote}</TableCell>
+                            <TableCell>{record.fechaIngreso}</TableCell>
                             <TableCell>
                                 <Button 
                                     onClick={() => handleEditClick(record)}
@@ -55,7 +57,7 @@ const List = ({list}) => {
         <AddCanvas
           open={isAddCanvasOpen}
           setOpen={setIsAddCanvasOpen}
-          materiaPrima={selectedRecord}
+          ingresoMateriaPrima={selectedRecord}
         />
       )}
     </>

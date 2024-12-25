@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card"
 import { Button } from "../../components/ui/button"
 import { ShoppingBasket, CookingPot, GanttChartIcon as ChartNoAxesGantt, LogOut, ScanEye } from 'lucide-react'
+import { LogIn } from 'lucide-react'
 
 // import { getMateriaPrimas } from '@/lib/mongo/materiaPrima'
 // import { getRecetas } from '@/lib/mongo/receta'
@@ -24,6 +25,11 @@ const recetas = [
 const ordenesProduccion = [
   { _id: '1', receta: '1', cantidadSolicitada: 100, estado: 'En Proceso' },
   { _id: '2', receta: '2', cantidadSolicitada: 200, estado: 'Pendiente' },
+]
+
+const ingresoProducto = [
+  { _id: '1', ordenProduccion: '1', cantidadEgresada: 50, lote: 'L001' },
+  { _id: '2', ordenProduccion: '2', cantidadEgresada: 100, lote: 'L002' },
 ]
 
 const egresosProducto = [
@@ -65,6 +71,12 @@ export default function ProduccionDashboard() {
           description={`${ordenesProduccion.length} órdenes activas`}
           icon={<ChartNoAxesGantt className="h-6 w-6" />}
           linkHref="/produccion/ordenes-produccion"
+        />
+        <DashboardCard
+          title="Ingreso Materias Primas"
+          description={`${ingresoProducto.length} ingresos registrados`}
+          icon={<LogIn className="h-6 w-6" />}
+          linkHref="/produccion/ingreso-materias"
         />
         <DashboardCard
           title="Egreso de Producto"

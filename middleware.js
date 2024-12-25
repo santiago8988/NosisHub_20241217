@@ -16,4 +16,4 @@
 
 export { default } from 'next-auth/middleware'
 
-export const config = { matcher: ['/admin', '/profile', '/','/NewRecord/:path*','/RecordList/:path*','/inicio/:path*','/document/:path*','/entrie/:path*','/organization'] }
+export const config = { matcher: ['/admin', '/profile', '/','/NewRecord/:path*','/RecordList/:path*','/inicio/:path*','/document/:path*','/entrie/:path*','/organization','/produccion/:path*'] }
