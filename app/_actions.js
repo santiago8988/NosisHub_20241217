@@ -5,7 +5,7 @@ import { getDocumentsByUser2,addFunctionalPdf, addParagraph, changeStatus, creat
 import { complete, createEntry, getEntriesByOrganizationAdmin, getEntriesByRecord, getEntriesByRecordId, getEntriesByUser, getEntry, importEntrys, inactivateEntry, updateNextField } from '@/lib/mongo/entries';
 import { createHistory, getHistoryByDocumentId } from '@/lib/mongo/history';
 import { addArea, addQA, deleteArea, deleteQA, getAreas, getOrganization, getRoles } from '@/lib/mongo/organization';
-import { addCollaborators, createRecord, deleteCollaborator, getActiveRecords, getActiveRecordsNames, getRecordById, getRecordsByUserEmail, getRecordsByUserEmail2, getRecordsObsoleteByUserEmail, getRecordsObsoleteByUserEmail2, inactiveRecord } from '@/lib/mongo/records'
+import { addCollaborators, createRecord, deleteCollaborator, getActiveRecords, getActiveRecordsNames, getRecordById, getRecordByName, getRecordsByUserEmail, getRecordsByUserEmail2, getRecordsObsoleteByUserEmail, getRecordsObsoleteByUserEmail2, inactiveRecord } from '@/lib/mongo/records'
 import { findUserByEmail, updateUser,getImageByUserEmail } from '@/lib/mongo/users'
 import { convertToPlainObject, DaysDifCurrentDate } from '@/lib/utils/utils';
 import { revalidatePath } from 'next/cache';
@@ -17,6 +17,24 @@ export async function updateName(name, email) {
 ////////////////////////////////////
 //////////////RECORDS//////////////
 ///////////////////////////////////
+
+export async function getRecordByNameAction(recordName,organizationId) {
+    try {
+      const materiasPrimas = await getRecordByName(recordName,organizationId)
+      return { 
+        status: 200, 
+        record: materiasPrimas.map(mp => ({
+          ...mp.toObject(),
+          _id: mp._id.toString(),
+          createdBy:mp.createdBy.toString(),
+          organization: mp.organization.toString()
+        }))
+      }
+    } catch (error) {
+      console.error('Error al obtener materias primas:', error)
+      return { status: 500, message: 'Error al obtener materias primas.' }
+    }
+  }
 
 export async function getRecordsByUserEmailAction(email){
    const response = await getRecordsByUserEmail(email);

@@ -10,7 +10,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function ActionMenu({isActive,completed,entrie}) {
+export default function ActionMenu({isActive,completed,entrie,recordType}) {
 
     const [showModal,setShowModal]=useState(false)
     const [showModalObsolete,setShowModalObsolete]=useState(false)
@@ -78,7 +78,7 @@ export default function ActionMenu({isActive,completed,entrie}) {
                 </Menu.Items>
             </Transition>
             </Menu>  
-            <OffCanvasEditEntrie open={showModal} setOpen={setShowModal} initialentrie={entrie}/>
+            <OffCanvasEditEntrie open={showModal} setOpen={setShowModal} initialentrie={entrie} recordType={recordType}/>
             <OffCanvasArchiveEntrie open={showModalObsolete} setOpen={setShowModalObsolete} initialentrie={entrie}/>          
     </Fragment>
   )

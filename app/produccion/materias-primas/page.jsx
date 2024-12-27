@@ -15,10 +15,24 @@ import List from "./components/List"
 import { getMateriaPrimasAction, getMateriaPrimasByOrganizationPaginationAction } from "@/app/actions"
 import AddButton from "./components/AddButton"
 
+import {  getEntriesByRecordIdAction, getRecordByNameAction } from "@/app/_actions"
+import EntriesTable from "@/app/components/entries/EntriesTable"
+import ButtonAddEntrie from "@/app/components/entries/ButtonAddEntrie"
+
 const MateriasPrimas = async(searchParams) => {
 
     const session = await getServerSession(authOptions)
     const { status, materiasPrimas, message } = await getMateriaPrimasAction(session?.user?.organization)
+    const {  record } = await getRecordByNameAction('Materias Primas',session?.user?.organization)
+
+    if (!record) {
+      return <div>No se encontró el registro de Materias Primas.</div>
+    }
+
+    const entries = await getEntriesByRecordIdAction(record[0]._id)
+
+    
+    
 
     const page = typeof searchParams.page === 'string' ? Number(searchParams.page) : 1
     const limit = typeof searchParams.limit === 'string' ? Number(searchParams.limit) : 12
@@ -31,6 +45,8 @@ const MateriasPrimas = async(searchParams) => {
     const promise=getMateriaPrimasByOrganizationPaginationAction(session?.user?.organization,search,page,limit)
 
   return (
+  <>
+
     <section className='flex-1 overflow-y-auto bg-white p-5' key={uuid()}>
         <div className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold text-gray-900">Materias Primas</h1>
@@ -71,6 +87,16 @@ const MateriasPrimas = async(searchParams) => {
       </Suspense>
       
     </section>
+    <section className="flex-1 overflow-y-auto bg-white p-5">
+    <div className="flex justify-between items-center mb-6">
+        <h1 className="text-xl font-bold text-gray-900">Lista</h1>
+        <div className="flex items-center">
+            {record[0].isActive && <ButtonAddEntrie record={record[0]}/>}
+        </div>
+    </div>
+    <EntriesTable record={record[0]} entries={convertToPlainObject(entries)}/>
+    </section>
+    </>
   )
 }
 

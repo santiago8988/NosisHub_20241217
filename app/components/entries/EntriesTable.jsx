@@ -71,7 +71,7 @@ const EntriesTable = ({record,entries}) => {
                                 </React.Fragment>
                             ))}
                             <TableCell>{entry?.pdf ? ( <Base64ToPdf base64Data={entry.pdf} fileName={`Entrada_${entry._id}`}/>) : (null)}</TableCell>
-                            <TableCell><ActionMenu isActive={entry.isActive} completed={entry.completed} entrie={entry}/></TableCell>
+                            <TableCell><ActionMenu isActive={entry.isActive} completed={entry.completed} entrie={entry} recordType={record.type}/></TableCell>
                         </TableRow>
                         ))}
                     </TableBody>

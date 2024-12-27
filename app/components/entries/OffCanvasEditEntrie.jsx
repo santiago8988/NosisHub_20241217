@@ -10,7 +10,7 @@ import {  toast } from 'react-toastify'
 import ConfirmationModal from '../ui/ConfirmationModal';
 
 
-const OffCanvasEditEntrie = ({ open,setOpen,initialentrie }) => {
+const OffCanvasEditEntrie = ({ open,setOpen,initialentrie,recordType }) => {
 
     const router=useRouter()
     const {data : session} = useSession()
@@ -75,8 +75,8 @@ const OffCanvasEditEntrie = ({ open,setOpen,initialentrie }) => {
             const formObject = Object.fromEntries(formData.entries());
 
             const response = await completeEntrieAction(entrie._id,formObject,action,session.user.email)
-          
-                if( response && response.completed === true){
+
+                if( response && recordType!=='NOT PERIODIC' && response.completed === true){
                     toast('Your entrie has been completed successfully.', {
                             theme: 'dark',
                             type: 'success',
@@ -122,6 +122,19 @@ const OffCanvasEditEntrie = ({ open,setOpen,initialentrie }) => {
                           setEntrie({})
                           setOpen(false)
                               }, 3000)
+                    }else if(response && recordType==='NOT PERDIODIC'){
+                              toast('Tu entrada ha sido editada correctamente.', {
+                                theme: 'dark',
+                                type: 'success',
+                                autoClose: 2500
+                          })
+                          setTimeout(() => {
+                            setConfirm(false)
+                            setIsLoading(false)
+                            setRecord({})
+                            setEntrie({})
+                            setOpen(false)
+                           }, 3000);
                     }
             }
           complete();
