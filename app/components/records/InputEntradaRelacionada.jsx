@@ -1,11 +1,13 @@
 'use client'
 
 import { getActiveRecordsAction } from "@/app/_actions"
+import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
 import Select from "react-select"
 
 const InputEntradaRelacionada = ({label,record,setRecord}) => {
 
+    const {data:session}=useSession()
     const [recordList, setRecordList] = useState([])
     const [selectedOptions, setSelectedOptions] = useState(record?.own[label] ? record?.own[label].fieldsToWrite : [])
     const [recordReference, setRecordReference] = useState(record?.own[label] ? record?.own[label].record : '')
@@ -13,7 +15,7 @@ const InputEntradaRelacionada = ({label,record,setRecord}) => {
 
     useEffect(() => {
         const fetchRecord = async () => {
-            const response = await getActiveRecordsAction()
+            const response = await getActiveRecordsAction(session?.user?.organization)
             if (response.status === 200) {
                 const sortedRecords = response.records.sort((a, b) => {
                     if (a.name < b.name) return -1
