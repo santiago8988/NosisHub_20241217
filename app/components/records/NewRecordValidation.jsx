@@ -8,6 +8,8 @@ import OffCanvasImportEntrys from './OffCanvasImportEntrys';
 
 const NewRecordValidation = ({record,initialRecord}) => {
 
+    
+  
     const router = useRouter()
     const { data: session, update } = useSession()
     const [records,setRecords] = useState([])
@@ -28,13 +30,14 @@ const NewRecordValidation = ({record,initialRecord}) => {
 
     useEffect(()=>{
         const fetchRecords= async ()=>{
-                const data = await getActiveRecordsNamesAction()
+                const data = await getActiveRecordsNamesAction(session?.user?.organization)
                 if(data.status===200){
                     setRecords(data.records)
                 }
         }
         fetchRecords()
     },[])
+
 
     const isEmpty = (attribute,value) => {
 
@@ -134,11 +137,14 @@ const NewRecordValidation = ({record,initialRecord}) => {
                         return {valid:false,msg:'Acciones: "Cantidad" sin completar'}
                     }
                 }
-                if(action.writeOnField===''){
-                    return {valid:false,msg:'Acciones: "Campo" sin completar'}
+                if (Object.keys(action.mappings).length === 0) {
+                    return { valid: false, msg: 'Acciones: "mapeo" está vacío' };
                 }
-                if(action.recordField===''){
-                    return {valid:false,msg:'Acciones: "Campo" sin completar'}
+                
+                const emptyValues = Object.values(action.mappings).some(value => value === '' || value === null || value === undefined);
+                
+                if (emptyValues) {
+                    return { valid: false, msg: 'Acciones: "mapeo" contiene valores vacíos' };
                 }
                 return {valid:true,msg:'Accion válida'}
             }else{
@@ -149,11 +155,11 @@ const NewRecordValidation = ({record,initialRecord}) => {
         return actionVerify
     }
 
-    const validateTypes = (actions) => {
-        
+    /*const validateTypes = (actions) => {
+     
         const actionVerify=actions.map(field=>{
                 const registroSeleccionado = records.filter(record => record._id === field.writeOnRecord);
-            
+                console.log(registroSeleccionado)
                 if(registroSeleccionado[0].own[field.writeOnField].tipo === 'referencia' ){
         
                     const referencia = records.filter(record => record._id === registroSeleccionado[0].own[field.writeOnField].record)
@@ -169,8 +175,60 @@ const NewRecordValidation = ({record,initialRecord}) => {
                 }
         })
         return actionVerify
-    }
+    }*/
 
+        const validateTypes = (actions) => {
+            return actions.map(action => {
+              const destinationRecord = records.find(record => record._id === action.writeOnRecord);
+              
+              if (!destinationRecord) {
+                return { valid: false, msg: 'Registro destino no encontrado.' };
+              }
+          
+              const mappingResults = Object.entries(action.mappings).map(([sourceField, destField]) => {
+                let sourceType = record.own[sourceField].tipo;
+                let destType = destinationRecord.own[destField].tipo;
+          
+                // If source field is a reference, get the type of the referenced field
+                if (sourceType === 'referencia') {
+                  const referencedSourceRecord = records.find(record => record._id === record.own[sourceField].record);
+                  if (referencedSourceRecord) {
+                    sourceType = referencedSourceRecord.own[record.own[sourceField].campo].tipo;
+                  } else {
+                    return { valid: false, msg: `Registro referenciado no encontrado para el campo origen ${sourceField}.` };
+                  }
+                }
+          
+                // If destination field is a reference, get the type of the referenced field
+                if (destType === 'referencia') {
+                  const referencedDestRecord = records.find(record => record._id === destinationRecord.own[destField].record);
+                  if (referencedDestRecord) {
+                    destType = referencedDestRecord.own[destinationRecord.own[destField].campo].tipo;
+                  } else {
+                    return { valid: false, msg: `Registro referenciado no encontrado para el campo destino ${destField}.` };
+                  }
+                }
+          
+                // Compare types
+                if (sourceType === destType || (sourceType === 'text' && destType === 'text')) {
+                  return { valid: true, msg: 'Tipo válido' };
+                } else {
+                  return { valid: false, msg: `El campo origen ${sourceField} (${sourceType}) no es compatible con el campo destino ${destField} (${destType}).` };
+                }
+              });
+          
+              // Check if all mappings are valid
+              const isValid = mappingResults.every(result => result.valid);
+              const messages = mappingResults.filter(result => !result.valid).map(result => result.msg);
+          
+              return {
+                valid: isValid,
+                msg: isValid ? 'Todos los tipos son válidos' : messages.join(' ')
+              };
+            });
+          };
+          
+          
     const validateObject=(obj)=> {
         for (let key in obj) {
             if (obj.hasOwnProperty(key)) {

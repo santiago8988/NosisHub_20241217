@@ -1,4 +1,4 @@
-import { getRecordByIdAction } from "@/app/_actions";
+import { getRecordByIdAction, getRecordNameAction } from "@/app/_actions";
 import ButtonNewVersion from "@/app/components/records/ButtonNewVersion";
 import { convertToPlainObject } from "@/lib/utils/utils";
 import { getServerSession } from "next-auth";
@@ -9,7 +9,6 @@ const recordinfo = async ({ params }) => {
   
   const session=await getServerSession(authOptions)
   const data = await getRecordByIdAction(params.id)
-
 
   if (data.status !== 200) {
     return (
@@ -27,7 +26,6 @@ const recordinfo = async ({ params }) => {
 
   const checkAccess = (recordOwner, recordCollaborators) => {
     const currentUserId = session?.user?.id;
-    console.log(recordOwner)
     if (currentUserId === recordOwner) {
       return true;
     }
@@ -222,7 +220,7 @@ const recordinfo = async ({ params }) => {
                         {/* Segundo elemento */}
                         <div className="ml-4 flex flex-col min-w-0">
                           <span className="truncate font-medium">
-                            {findName(action.writeOnRecord)}
+                            {action.writeOnRecord}
                           </span>
                         </div>
                       </div>

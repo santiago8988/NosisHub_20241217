@@ -32,6 +32,7 @@ const NewRecordFormAction = ({record,setRecord,setActiveTab}) => {
 
     let newAction ={
       actionKey: uuidv4(),
+      mappings:{},
       recordField : "",
       writeOnRecord : recordSelected,
       writeOnField : "",

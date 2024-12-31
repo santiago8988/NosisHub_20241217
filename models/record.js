@@ -9,6 +9,9 @@ const actionSchema = new mongoose.Schema({
     actionKey : {
         type: String
     },
+    mappings: {
+        type: Object,
+    },
     recordField :{
         type : String,
     }, 

@@ -21,12 +21,11 @@ const RecordList = async ({searchParams}) => {
 
    const organization = await getOrganizationAction()
    const page = typeof searchParams.page === 'string' ? Number(searchParams.page) : 1
-   const limit = typeof searchParams.limit === 'string' ? Number(searchParams.limit) : 12
+   const limit = typeof searchParams.limit === 'string' ? Number(searchParams.limit) : 11
    const search = typeof searchParams.search === 'string' ? searchParams.search : undefined
 
-   /*const { movies } = await getMovies({ page, limit, query: search })*/
-
    const promise = getRecordsByUserEmailAction2(session?.user?.id,search,page,limit)
+
 
   return (
 
@@ -47,7 +46,7 @@ const RecordList = async ({searchParams}) => {
                 <BarChart className="h-4 w-4 text-blue-500" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{recordList?.length>=0 ? recordList?.length : 0 }</div>
+                <div className="text-2xl font-bold">{recordList?.records?.length>=0 ? recordList?.records?.length : 0 }</div>
               </CardContent>
             </Card>
          </div>

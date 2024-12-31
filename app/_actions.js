@@ -5,7 +5,7 @@ import { getDocumentsByUser2,addFunctionalPdf, addParagraph, changeStatus, creat
 import { complete, createEntry, getEntriesByOrganizationAdmin, getEntriesByRecord, getEntriesByRecordId, getEntriesByUser, getEntry, importEntrys, inactivateEntry, updateNextField } from '@/lib/mongo/entries';
 import { createHistory, getHistoryByDocumentId } from '@/lib/mongo/history';
 import { addArea, addQA, deleteArea, deleteQA, getAreas, getOrganization, getRoles } from '@/lib/mongo/organization';
-import { addCollaborators, createRecord, deleteCollaborator, getActiveRecords, getActiveRecordsNames, getRecordById, getRecordByName, getRecordsByUserEmail, getRecordsByUserEmail2, getRecordsObsoleteByUserEmail, getRecordsObsoleteByUserEmail2, inactiveRecord } from '@/lib/mongo/records'
+import { addCollaborators, createRecord, deleteCollaborator, getActiveRecords, getActiveRecordsNames, getRecordById, getRecordByName, getRecordName, getRecordsByUserEmail, getRecordsByUserEmail2, getRecordsObsoleteByUserEmail, getRecordsObsoleteByUserEmail2, inactiveRecord } from '@/lib/mongo/records'
 import { findUserByEmail, updateUser,getImageByUserEmail } from '@/lib/mongo/users'
 import { convertToPlainObject, DaysDifCurrentDate } from '@/lib/utils/utils';
 import { revalidatePath } from 'next/cache';
@@ -50,6 +50,7 @@ export async function getRecordsObsoleteByUserEmailAction(email){
 
 export async function getRecordsByUserEmailAction2(userId,query,page,limit){
   const response = await getRecordsByUserEmail2(userId,query,page,limit);
+  revalidatePath('/RecordList')
   const data=await response.json()
    return data;
 }
@@ -73,12 +74,35 @@ export async function getActiveRecordsAction(organizationid){
   return list;
 }
 
-export async function getActiveRecordsNamesAction(){
-  const response = await getActiveRecordsNames()
+export async function getActiveRecordsNamesAction(organizationid){
+  const response = await getActiveRecordsNames(organizationid)
   const list = await response.json()
   return list;
 }
 
+export async function getRecordNameAction(recordId) {
+  try {
+    const recordName = await getRecordName(recordId);
+    
+    if (recordName === null) {
+      return { 
+        status: 404, 
+        message: 'Record not found.'
+      };
+    }
+    
+    return { 
+      status: 200, 
+      data: { name: recordName }
+    };
+  } catch (error) {
+    console.error('Error in getRecordNameAction:', error);
+    return { 
+      status: 500, 
+      message: 'An error occurred while retrieving the record name.'
+    };
+  }
+}
 
 export async function createRecordAction(recordObject){
   
@@ -149,7 +173,7 @@ export async function getEntriesByRecordAction(recordId){
   return jsonEntries;
 }
 
-export async function executeAction(actions,values){
+/*export async function executeAction(actions,values){
 
   try {
         const executedActions = await Promise.all(actions.map(async(action) =>{
@@ -209,8 +233,100 @@ export async function executeAction(actions,values){
     } catch (error) {
         throw error; // 
       }
-}
+}*/
 
+
+export async function executeAction(actions, values) {
+ 
+  try {
+    const executedActions = await Promise.all(actions.map(async (action) => {
+      try {
+        const { writeOnRecord, mappings, quantityType, quantityField, quantityNumber, createdBy } = action;
+        const response = await getRecordById(writeOnRecord);
+        const { record } = await response.json();
+
+        if (record) {
+          const { own, periodicity, type } = record;
+          let nuevaDueDate;
+          let fechaActual;
+          let complete;
+          let next;
+          let completeby;
+
+          // Determine the new due date based on the record type
+          if (type === 'PERIODIC') {
+            fechaActual = new Date(values.FECHA);
+            fechaActual.setDate(fechaActual.getDate() + periodicity);
+            complete=false;
+            next=true;
+            completeby='';
+            nuevaDueDate = fechaActual.toISOString().slice(0, 10);
+          } else if (type === 'NOT PERIODIC WITH REVISION') {
+            nuevaDueDate = values.vencimiento;
+            complete=false;
+            next=false;
+            completeby='';
+          } else if (type === 'NOT PERIODIC') {
+            nuevaDueDate = values.FECHA;
+            complete=true;
+            next=true;
+            completeby=createdBy;
+          }
+
+          // Create new values object based on mappings
+          let newValues = {};
+          for (const [sourceField, destField] of Object.entries(mappings)) {
+            if (destField === 'fecha') {
+              newValues[destField] = values.fecha;
+            } else {
+              newValues[destField] = values[sourceField] || "";
+            }
+          }
+
+          // Add empty strings for fields not in mappings
+          for (const field of Object.keys(own)) {
+            if (!Object.values(mappings).includes(field)) {
+              newValues[field] = "";
+            }
+          }
+
+          // Handle quantity if specified
+          if (quantityType === 'campo' && quantityField) {
+            const quantity = parseInt(values[quantityField], 10) || 1;
+            // You might want to adjust this part based on how you want to use the quantity
+            console.log(`Action will be executed ${quantity} times`);
+          } else if (quantityType === 'valor' && quantityNumber) {
+            const quantity = parseInt(quantityNumber, 10) || 1;
+            console.log(`Action will be executed ${quantity} times`);
+          }
+
+          const entrieAction = {
+            record: writeOnRecord,
+            dueDate: nuevaDueDate,
+            createdBy: createdBy,
+            completedBy:completeby,
+            completed:complete,
+            nextCreated:next,
+            values: newValues,
+          };
+
+
+          const entryResponse = await createEntry(entrieAction);
+          const { entrie } = await entryResponse.json();
+          return { success: true, result: entrie, error: "" };
+        } else {
+          return { success: false, result: "", error: "Record not found" };
+        }
+      } catch (error) {
+        return { success: false, result: "", error: error.message };
+      }
+    }));
+
+    return executedActions;
+  } catch (error) {
+    throw error;
+  }
+}
 export async function importEntrysAction(recordid, newrecordid, fieldMappings) {
   try {
     const response = await importEntrys(recordid, newrecordid, fieldMappings)
