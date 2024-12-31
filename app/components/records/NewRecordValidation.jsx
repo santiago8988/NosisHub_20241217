@@ -6,7 +6,7 @@ import { createRecordAction, getActiveRecordsNamesAction, importEntrysAction, in
 import { ToastContainer, toast } from 'react-toastify'
 import OffCanvasImportEntrys from './OffCanvasImportEntrys';
 
-const NewRecordValidation = ({record}) => {
+const NewRecordValidation = ({record,initialRecord}) => {
 
     const router = useRouter()
     const { data: session, update } = useSession()
@@ -24,7 +24,7 @@ const NewRecordValidation = ({record}) => {
       const [showModal, setShowModal] = useState(false)
       const [importEntrys, setImportEntrys] = useState(false)
       const [isReadyToCreate, setIsReadyToCreate] = useState(false)
-
+      const [fieldsMap,setFieldsMap]=useState({})
 
     useEffect(()=>{
         const fetchRecords= async ()=>{
@@ -333,14 +333,16 @@ const NewRecordValidation = ({record}) => {
             handleCreate()
         }
      }
-
-     const handleModalClose = (shouldImport) => {
+     const handleModalClose = (shouldImport, fieldMappings = {}) => {
         setImportEntrys(shouldImport);
+        if (shouldImport && Object.keys(fieldMappings).length > 0) {
+            // Guardar fieldMappings para usarlo en importEntrys
+            setFieldsMap(fieldMappings);
+        }
         setIsReadyToCreate(true);
         setShowModal(false);
         handleCreate();
     };
-    
       const handleCreate = async () => {
 
         if (record?._id && !isReadyToCreate) {
@@ -373,7 +375,7 @@ const NewRecordValidation = ({record}) => {
                         const responseInactiveRecord = await inactiveRecordAction(record._id)
                         let responseImportEntrys
                             if(importEntrys){
-                                    responseImportEntrys=await importEntrysAction(record?._id,response.recordId,Object.keys(record?.own))
+                                    responseImportEntrys=await importEntrysAction(record?._id,response.recordId,fieldsMap)
                             }
                             console.log(responseImportEntrys)
                         if(responseInactiveRecord.status===200){
@@ -607,7 +609,7 @@ const NewRecordValidation = ({record}) => {
                     <p className='mt-3'>No hay registro configurado aún.</p>
                 )
         } 
-        <OffCanvasImportEntrys open={showModal} setOpen={setShowModal} onClose={handleModalClose}/>
+        <OffCanvasImportEntrys open={showModal} setOpen={setShowModal} onClose={handleModalClose}  record={record} initialRecord={initialRecord}/>
         <ToastContainer/>
 
     </Fragment>

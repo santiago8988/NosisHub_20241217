@@ -211,9 +211,9 @@ export async function executeAction(actions,values){
       }
 }
 
-export async function importEntrysAction(recordid, newrecordid, newownkeys) {
+export async function importEntrysAction(recordid, newrecordid, fieldMappings) {
   try {
-    const response = await importEntrys(recordid, newrecordid, newownkeys)
+    const response = await importEntrys(recordid, newrecordid, fieldMappings)
     const data = await response.json()
     revalidatePath('/RecordList')
     

@@ -5,6 +5,11 @@ import { convertToPlainObject } from "@/lib/utils/utils";
 
 const edit = async ({params}) => {
   const data = await getRecordByIdAction(params.id);
+  
+  if (data?.status === 404) {
+    return <div className="text-red-500">{data?.msg}</div>
+  }
+
   return (
     <section className='py-2'>
         <div className='container'>

@@ -96,7 +96,7 @@ const NewRecordForm = ({initialRecord}) => {
               {activeTab === 'comparacion' && <NewRecordFormCompare record={record} setRecord={setRecord} setActiveTab={setActiveTab}/>}
               {activeTab === 'formula' && <NewRecordFormFormula record={record} setRecord={setRecord} setActiveTab={setActiveTab} />}
               {activeTab === 'acciones' && <NewRecordFormAction record={record} setRecord={setRecord} setActiveTab={setActiveTab}/>}
-              {activeTab === 'finalizar' && <NewRecordValidation record={record} />}
+              {activeTab === 'finalizar' && <NewRecordValidation record={record} initialRecord={initialRecord}/>}
             </div>
         </section>
 
